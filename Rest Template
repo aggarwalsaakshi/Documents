@@ -1,0 +1,111 @@
+REST Template
+
+Spring's RestTemplate is a robust, popular Java-based REST client. The Spring for Android RestTemplate Module provides a version of RestTemplate that works in an Android environment
+
+The RestTemplate class is the heart of the Spring for Android RestTemplate library.RestTemplate's behavior is customized by providing callback methods and configuring the HttpMessageConverter used to marshal objects into the HTTP request body and to unmarshal any response back into an object. When you create a new RestTemplate instance, the constructor sets up several supporting objects that make up the RestTemplate functionality.
+
+RestTemplate provides an abstraction for making RESTful HTTP requests, and internally, RestTemplate utilizes a native Android HTTP client library for those requests.There are two native HTTP clients available on Android, the standard J2SE facilities, and the HttpComponents HttpClient. The standard JS2SE facilities are made available through the SimpleClientHttpRequestFactory, while the HttpClient is made available through the HttpComponentsClientHttpRequestFactory. The default ClientHttpRequestFactory used when you create a new RestTemplate instance differs based on the version of Android on which your application is running.
+
+Google recommends to use the J2SE facilities on Gingerbread (Version 2.3) and newer, while previous versions should use the HttpComponents HttpClient. Based on this recommendation RestTemplate checks the version of Android on which your app is running and uses the appropriate ClientHttpRequestFactory. To utilize a specific ClientHttpRequestFactory you must either pass a new instance into the RestTemplate constructor, or call setRequestFactory(ClientHttpRequestFactory requestFactory) on an existing RestTemplate instance.
+
+RestTemplate supports sending and receiving data encoded with gzip compression. The HTTP specification allows for additional values in the Accept-Encoding header field, however RestTemplate only supports gzip compression at this time.
+
+Object to JSON Marshaling
+Object to JSON marshaling in Spring for Android RestTemplate requires the use of a third party JSON mapping library. There are three libraries supported in Spring for Android, Jackson JSON Processor, Jackson 2.x, and Google Gson. While Jackson is a well known JSON parsing library, the Gson library is smaller, which would result in an smaller Android app when packaged.
+
+Object to XML Marshaling
+Object to XML marshaling in Spring for Android RestTemplate requires the use of a third party XML mapping library. The Simple XML serializer is used to provide this marshaling functionality.
+
+RSS and Atom feed support in Spring for Android RestTemplate requires the use of a third party feed reader library. The Android ROME Feed Reader is used to provide this functionality.
+
+
+The four RestTemplate constructors are listed below.
+RestTemplate();
+
+RestTemplate(boolean includeDefaultConverters);
+
+RestTemplate(ClientHttpRequestFactory requestFactory);
+
+RestTemplate(boolean includeDefaultConverters, ClientHttpRequestFactory requestFactory);
+
+The default constructor does not include any message body converters. You must add a message converter when using the default constructor. If you would like to include a default set of message converters with a new RestTemplate instance, then you can pass true for the includeDefaultConverters parameter. For a list of default converters, see the HTTP Message Conversion section. Additionally, if you would like to specify a different ClientHttpRequestFactory then you can do so by passing it in to the requestFactory parameter.
+
+RestTemplate Methods
+RestTemplate provides higher level methods that correspond to each of the six main HTTP methods. These methods make it easy to invoke many RESTful services and enforce REST best practices.
+
+The names of RestTemplate methods follow a naming convention, the first part indicates what HTTP method is being invoked and the second part indicates what is returned. For example, the method getForObject() will perform a GET, convert the HTTP response into an object type of your choice and return that object. The method postForLocation() will do a POST, converting the given object into a HTTP request and return the response HTTP Location header where the newly created object can be found. In case of an exception processing the HTTP request, an exception of the type RestClientException will be thrown. This behavior can be changed by plugging in another ResponseErrorHandler implementation into the RestTemplate.
+
+ HTTP DELETE
+
+public void delete(String url, Object... urlVariables) throws RestClientException;
+
+public void delete(String url, Map<String, ?> urlVariables) throws RestClientException;
+
+public void delete(URI url) throws RestClientException;
+
+	HTTP GET
+
+public <T> T getForObject(String url, Class<T> responseType, Object... urlVariables) throws RestClientException;
+
+public <T> T getForObject(String url, Class<T> responseType, Map<String, ?> urlVariables) throws RestClientException;
+
+public <T> T getForObject(URI url, Class<T> responseType) throws RestClientException;
+
+public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Object... urlVariables);
+
+public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Map<String, ?> urlVariables);
+
+public <T> ResponseEntity<T> getForEntity(URI url, Class<T> responseType) throws RestClientException;
+
+HTTP HEAD
+
+public HttpHeaders headForHeaders(String url, Object... urlVariables) throws RestClientException;
+
+public HttpHeaders headForHeaders(String url, Map<String, ?> urlVariables) throws RestClientException;
+
+public HttpHeaders headForHeaders(URI url) throws RestClientException;
+
+
+HTTP OPTIONS
+
+public Set<HttpMethod> optionsForAllow(String url, Object... urlVariables) throws RestClientException;
+
+public Set<HttpMethod> optionsForAllow(String url, Map<String, ?> urlVariables) throws RestClientException;
+
+public Set<HttpMethod> optionsForAllow(URI url) throws RestClientException;
+		
+		
+		 HTTP POST
+
+public URI postForLocation(String url, Object request, Object... urlVariables) throws RestClientException;
+
+public URI postForLocation(String url, Object request, Map<String, ?> urlVariables);
+
+public URI postForLocation(URI url, Object request) throws RestClientException;
+
+public <T> T postForObject(String url, Object request, Class<T> responseType, Object... uriVariables);
+
+public <T> T postForObject(String url, Object request, Class<T> responseType, Map<String, ?> uriVariables);
+
+public <T> T postForObject(URI url, Object request, Class<T> responseType) throws RestClientException;
+
+public <T> ResponseEntity<T> postForEntity(String url, Object request, Class<T> responseType, Object... uriVariables);
+
+public <T> ResponseEntity<T> postForEntity(String url, Object request, Class<T> responseType, Map<String, ?> uriVariables) throws RestClientException;
+
+public <T> ResponseEntity<T> postForEntity(URI url, Object request, Class<T> responseType) throws RestClientException;
+		
+		
+		HTTP PUT
+
+public void put(String url, Object request, Object... urlVariables) throws RestClientException;
+
+public void put(String url, Object request, Map<String, ?> urlVariables) throws RestClientException;
+
+public void put(String url, Object request, Map<String, ?> urlVariables) throws RestClientException;
+
+
+
+
+
+
